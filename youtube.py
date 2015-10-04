@@ -33,14 +33,16 @@ def privmsg(data, signal, signal_data):
 	if not bots_exist:
             if not api_key == "not_set":
                 vid_id = youtube_regex_match.group(6)
-                r = requests.get('https://www.googleapis.com/youtube/v3/videos/?id=%s&part=snippet&key=%s' % (vid_id, api_key))
+                rvt = requests.get('https://www.googleapis.com/youtube/v3/videos/?id={0}&part=snippet&key={1}'.format(vid_id, api_key))
+                rvc = requests.get('https://www.googleapis.com/youtube/v3/videos/?id={0}&part=statistics&key={1}'.format(vid_id, api_key))
                 try:
-                    vid_title = r.json()['items'][0]['snippet']['title'].encode('utf-8')
+                    vid_title = rvt.json()['items'][0]['snippet']['title'].encode('utf-8')
+                    vid_views = rvc.json()['items'][0]['statistics']['viewCount']
                 except:
-                    vid_title = "Error getting video title."
-                wc.command("", r"/msg %s Youtube video title: %s" % (buffer_name, vid_title))
+                    vid_title = "Error getting video info."
+                wc.command("", r"/msg {0} [Youtube] {1} | Views: {2}".format(buffer_name, vid_title, vid_views))
             else:
-                wc.command("", r"/msg %s Youtube api key not set." % (buffer_name))
+                wc.command("", r"/msg {0} Youtube api key not set.".format(buffer_name))
     return wc.WEECHAT_RC_OK
 wc.hook_signal("*,irc_in_privmsg", "privmsg", "")
 config()
