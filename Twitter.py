@@ -53,9 +53,9 @@ def privmsg(data, signal, signal_data):
                 tweet_id = twitter_regex_match.group(2)
                 tweet = TwitterAPI(consumer_key, consumer_secret, access_token_key, access_token_secret).request('statuses/show/:{0}'.format(tweet_id))
                 try:
-                    tweet_message = tweet.json()['text'].replace('\n', ' ')
+                    tweet_message = tweet.json()['text'].replace('\n', ' ').encode('utf-8')
                     tweet_message = HTMLParser().unescape(tweet_message)
-                    tweet_user = tweet.json()['user']['screen_name']
+                    tweet_user = tweet.json()['user']['screen_name'].encode('utf-8')
                     wc.command('', r'/msg {0} [Twitter] "{1}" by @{2}'.format(buffer_name, tweet_message, tweet_user))
                 except:
                     wc.command('', r'/msg {0} [Twitter] Error getting tweet info.'.format(buffer_name))
