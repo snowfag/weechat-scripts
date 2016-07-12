@@ -17,6 +17,8 @@ def privmsg(data, signal, signal_data):
     (server, signal) = signal.split(",")
     channels = wc.config_get_plugin('channels').replace(',', '|')
     api_key = wc.config_get_plugin('api_key')
+    if re.match('^\${sec\.data\.(.*)}$', api_key):
+        api_key = wc.string_eval_expression(api_key, {}, {}, {})
     bots_list = wc.config_get_plugin('other_bots').split(",")
     details = wc.info_get_hashtable("irc_message_parse", {"message": signal_data, "server": server})
     youtube_regex_match = re.compile(r'(.*https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})(.*)').match(details['text'])
@@ -39,9 +41,9 @@ def privmsg(data, signal, signal_data):
                     vid_title = rvt.json()['items'][0]['snippet']['title'].encode('utf-8')
                     vid_channel = rvt.json()['items'][0]['snippet']['channelTitle'].encode('utf-8')
                     vid_views = rvc.json()['items'][0]['statistics']['viewCount']
+                    wc.command("", r"/msg {0} [Youtube] {1} | Channel: {2} | Views: {3}".format(buffer_name, vid_title, vid_channel, vid_views))
                 except:
-                    vid_title = "Error getting video info."
-                wc.command("", r"/msg {0} [Youtube] {1} | Channel: {2} | Views: {3}".format(buffer_name, vid_title, vid_channel, vid_views))
+                    wc.command("", r"/msg {0} [Youtube] Error getting video info.".format(buffer_name))
             else:
                 wc.command("", r"/msg {0} Youtube api key not set.".format(buffer_name))
     return wc.WEECHAT_RC_OK
