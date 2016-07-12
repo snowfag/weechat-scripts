@@ -27,6 +27,15 @@ def privmsg(data, signal, signal_data):
     consumer_secret = wc.config_get_plugin('consumer_secret')
     access_token_key = wc.config_get_plugin('access_token_key')
     access_token_secret = wc.config_get_plugin('access_token_secret')
+    sec = re.compile('^\${sec\.data\.(.*)}$')
+    if sec.match(consumer_key):
+        consumer_key = wc.string_eval_expression(consumer_key, {}, {}, {})
+    if sec.match(consumer_secret):
+        consumer_secret = wc.string_eval_expression(consumer_secret, {}, {}, {})
+    if sec.match(access_token_key):
+        access_token_key = wc.string_eval_expression(access_token_key, {}, {}, {})
+    if sec.match(access_token_secret):
+        access_token_secret = wc.string_eval_expression(access_token_secret, {}, {}, {})
     bots_list = wc.config_get_plugin('other_bots').split(',')
     details = wc.info_get_hashtable('irc_message_parse', {'message': signal_data, 'server': server})
     twitter_regex_match = re.compile(r'(.*https?://)?twitter\.com/.*/status/([0-9]{18})(.*)').match(details['text'])
