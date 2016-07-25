@@ -21,7 +21,7 @@ def privmsg(data, signal, signal_data):
         api_key = wc.string_eval_expression(api_key, {}, {}, {})
     bots_list = wc.config_get_plugin('other_bots').split(",")
     details = wc.info_get_hashtable("irc_message_parse", {"message": signal_data, "server": server})
-    youtube_regex_match = re.compile(r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([a-zA-Z0-9_-]{11})').match(details['text'])
+    youtube_regex_match = re.compile(r'(.*https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([a-zA-Z0-9_-]{11})').match(details['text'])
     buffer_name = details['channel']
     buffer_pointer = wc.info_get("irc_buffer", "%s,%s" % (server, buffer_name))
     channels_regex = re.compile(r'(%s)' % (channels), re.I)
