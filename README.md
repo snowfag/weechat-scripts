@@ -4,5 +4,5 @@ scripts for use with the irc client Weechat
 #### about scripts:
 
 - [youtube.py](../master/youtube.py) - Announce youtube titles in channel
-- [autounban.py](../master/autounban.py) - Auto unban and rejoin channels when banned/kicked
+- [Twitter.py](../master/Twitter.py) - Announce tweet status in channel
 - [mpc-hc_np.py](../master/mpc-hc_np.py) - Spam 'now playing info' from MPC-HC in channel
