@@ -9,7 +9,7 @@ wc.register(name, 'snowfag', '2.0', 'BSD-2c', 'Twitter status announcer', '', ''
 def config(*args, **kwargs):
     global channels, consumer_key, consumer_secret, access_token_key, access_token_secret, bots_list
     if not wc.config_is_set_plugin('channels'):
-        wc.config_set_plugin('channels', '.*')
+        wc.config_set_plugin('channels', '*')
     if not wc.config_is_set_plugin('consumer_key'):
         wc.config_set_plugin('consumer_key', 'not_set')
     if not wc.config_is_set_plugin('consumer_secret'):
@@ -42,7 +42,7 @@ def privmsg(data, signal, signal_data):
     details = wc.info_get_hashtable('irc_message_parse', {'message': signal_data, 'server': server})
     buffer_name = details['channel'].lower()
     bots_exist = False
-    if buffer_name in channels:
+    if buffer_name in channels or '*' in channels:
         if not bots_list == 'not_set':
             buffer_pointer = wc.info_get('irc_buffer', '{},{}'.format(server, buffer_name))
             for other_bots in bots_list:

@@ -3,12 +3,12 @@ import weechat as wc
 import re
 
 name = 'youtube.py'
-wc.register(name, 'snowfag', '2.0', 'BSD-2c', 'Youtube video title announcer', '', '')
+wc.register(name, 'snowfag', '2.1', 'BSD-2c', 'Youtube video title announcer', '', '')
 
 def config(*args, **kwargs):
     global channels, api_key, bots_list
     if not wc.config_is_set_plugin('channels'):
-        wc.config_set_plugin('channels', '.*')
+        wc.config_set_plugin('channels', '*')
     if not wc.config_is_set_plugin('api_key'):
         wc.config_set_plugin('api_key', 'not_set')
     if not wc.config_is_set_plugin('other_bots'):
@@ -26,7 +26,7 @@ def privmsg(data, signal, signal_data):
     buffer_name = details['channel'].lower()
     buffer_pointer = wc.info_get('irc_buffer', '{},{}'.format(server, buffer_name))
     bots_exist = False
-    if buffer_name in channels:
+    if buffer_name in channels or '*' in channels:
         if not bots_list == 'not_set':
             for other_bots in bots_list:
                 bots_test = wc.nicklist_search_nick(buffer_pointer, '', other_bots)

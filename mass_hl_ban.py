@@ -1,12 +1,12 @@
 import weechat as wc
 
 name = "mass_hl_ban.py"
-wc.register(name, 'snowfag', '2.5', 'BSD-2c', 'Bans user if they highlight X number of users in channel in a single line', '', '')
+wc.register(name, 'snowfag', '2.6', 'BSD-2c', 'Bans user if they highlight X number of users in channel in a single line', '', '')
 
 def config(*args, **kwargs):
     global channels, whitelist, max_nick_count, mod_timer
     if not wc.config_is_set_plugin('channels'):
-        wc.config_set_plugin('channels', '.*')
+        wc.config_set_plugin('channels', '*')
     if not wc.config_is_set_plugin('whitelist'):
         wc.config_set_plugin('whitelist', 'not_set')
     if not wc.config_is_set_plugin('max_nick_count'):
@@ -27,7 +27,7 @@ def privmsg(data, signal, signal_data):
     (server, signal) = signal.split(',')
     details = wc.info_get_hashtable('irc_message_parse', {'message': signal_data, 'server': server})
     buffer_name = details['channel'].lower()
-    if buffer_name in channels:
+    if buffer_name in channels or '*' in channels:
         if not details['nick'].lower() in whitelist:
             buffer_pointer = wc.info_get('irc_buffer', '{},{}'.format(server, buffer_name))
             msg_list = details['text'].split()
