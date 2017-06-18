@@ -7,3 +7,4 @@ scripts for use with the irc client Weechat
 - [Twitter.py](../master/Twitter.py) - Announce tweet status in channel
 - [mpc-hc_np.py](../master/mpc-hc_np.py) - Spam 'now playing info' from MPC-HC in channel
 - [mass_hl_ban.py](../master/mass_hl_ban.py) - Bans user if they highlight X number of users in channel in a single line
+- [guest.py](../master/guest.py) - Removes Guest users from channel upon nick change by enforcing akick
