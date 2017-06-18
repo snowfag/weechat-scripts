@@ -4,7 +4,7 @@ import weechat as wc
 import re
 
 name = 'Twitter.py'
-wc.register(name, 'snowfag', '2.0', 'BSD-2c', 'Twitter status announcer', '', '')
+wc.register(name, 'snowfag', '2.1', 'BSD-2c', 'Twitter status announcer', '', '')
 
 def config(*args, **kwargs):
     global channels, consumer_key, consumer_secret, access_token_key, access_token_secret, bots_list
