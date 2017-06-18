@@ -4,7 +4,7 @@ import weechat as wc
 import re
 
 name = 'Twitter.py'
-wc.register(name, 'snowfag', '2.1', 'BSD-2c', 'Twitter status announcer', '', '')
+wc.register(name, 'snowfag', '2.2', 'BSD-2c', 'Twitter status announcer', '', '')
 
 def config(*args, **kwargs):
     global channels, consumer_key, consumer_secret, access_token_key, access_token_secret, bots_list
@@ -53,13 +53,13 @@ def privmsg(data, signal, signal_data):
             twitter_regex_match = re.compile(r'(.*https?://)?twitter\.com/.*/status/([0-9]{18})(.*)').match(details['text'])
             if twitter_regex_match:
                 if consumer_key == 'not_set':
-                    wc.command('', r'/msg {} Twitter consumer_key not set.'.format(buffer_name))
+                    wc.command(buffer_pointer, r'/msg {} Twitter consumer_key not set.'.format(buffer_name))
                 elif consumer_secret == 'not_set':
-                    wc.command('', r'/msg {} Twitter consumer_secret not set.'.format(buffer_name))
+                    wc.command(buffer_pointer, r'/msg {} Twitter consumer_secret not set.'.format(buffer_name))
                 elif access_token_key == 'not_set':
-                    wc.command('', r'/msg {} Twitter access_token_key not set.'.format(buffer_name))
+                    wc.command(buffer_pointer, r'/msg {} Twitter access_token_key not set.'.format(buffer_name))
                 elif access_token_secret == 'not_set':
-                    wc.command('', r'/msg {} Twitter access_token_secret not set.'.format(buffer_name))
+                    wc.command(buffer_pointer, r'/msg {} Twitter access_token_secret not set.'.format(buffer_name))
                 else:
                     tweet_id = twitter_regex_match.group(2)
                     tweet = TwitterAPI(consumer_key, consumer_secret, access_token_key, access_token_secret).request('statuses/show/:{}'.format(tweet_id))
@@ -67,9 +67,9 @@ def privmsg(data, signal, signal_data):
                         tweet_message = tweet.json()['text'].replace('\n', ' ').encode('utf-8')
                         tweet_message = HTMLParser().unescape(tweet_message)
                         tweet_user = tweet.json()['user']['screen_name'].encode('utf-8')
-                        wc.command('', r'/msg {} [Twitter] "{}" by @{}'.format(buffer_name, tweet_message, tweet_user))
+                        wc.command(buffer_pointer, r'/msg {} [Twitter] "{}" by @{}'.format(buffer_name, tweet_message, tweet_user))
                     except:
-                        wc.command('', r'/msg {} [Twitter] Error getting tweet info.'.format(buffer_name))
+                        wc.command(buffer_pointer, r'/msg {} [Twitter] Error getting tweet info.'.format(buffer_name))
     return wc.WEECHAT_RC_OK
 
 wc.hook_config('plugins.var.python.' + name + '.*', 'config', '')

@@ -1,7 +1,7 @@
 import weechat as wc
 
 name = "mass_hl_ban.py"
-wc.register(name, 'snowfag', '2.6', 'BSD-2c', 'Bans user if they highlight X number of users in channel in a single line', '', '')
+wc.register(name, 'snowfag', '2.7', 'BSD-2c', 'Bans user if they highlight X number of users in channel in a single line', '', '')
 
 def config(*args, **kwargs):
     global channels, whitelist, max_nick_count, mod_timer
@@ -37,8 +37,8 @@ def privmsg(data, signal, signal_data):
                 if test_word:
                     nick_count = nick_count + 1
             if nick_count >= int(max_nick_count):
-                wc.command('', r'/msg chanserv ban {0} {1} FUCK OFF.'.format(buffer_name, details['nick']))
-                wc.command('', r'/mode {} +M'.format(buffer_name))
+                wc.command(buffer_pointer, r'/msg chanserv ban {0} {1} FUCK OFF.'.format(buffer_name, details['nick']))
+                wc.command(buffer_pointer, r'/mode {} +M'.format(buffer_name))
                 wc.hook_timer(int(mod_timer) * 1000, 0, 1, 'unmod', buffer_name)
     return wc.WEECHAT_RC_OK
 

@@ -3,7 +3,7 @@ import weechat as wc
 import re
 
 name = 'youtube.py'
-wc.register(name, 'snowfag', '2.1', 'BSD-2c', 'Youtube video title announcer', '', '')
+wc.register(name, 'snowfag', '2.2', 'BSD-2c', 'Youtube video title announcer', '', '')
 
 def config(*args, **kwargs):
     global channels, api_key, bots_list
@@ -43,11 +43,11 @@ def privmsg(data, signal, signal_data):
                         vid_title = rvt.json()['items'][0]['snippet']['title'].encode('utf-8')
                         vid_channel = rvt.json()['items'][0]['snippet']['channelTitle'].encode('utf-8')
                         vid_views = rvc.json()['items'][0]['statistics']['viewCount']
-                        wc.command('', r'/msg {} [Youtube] {} | Channel: {} | Views: {}'.format(buffer_name, vid_title, vid_channel, vid_views))
+                        wc.command(buffer_pointer, r'/msg {} [Youtube] {} | Channel: {} | Views: {}'.format(buffer_name, vid_title, vid_channel, vid_views))
                     except:
-                        wc.command('', r'/msg {} [Youtube] Error getting video info.'.format(buffer_name))
+                        wc.command(buffer_pointer, r'/msg {} [Youtube] Error getting video info.'.format(buffer_name))
             else:
-                wc.command('', r'/msg {} Youtube api key not set.'.format(buffer_name))
+                wc.command(buffer_pointer, r'/msg {} Youtube api key not set.'.format(buffer_name))
     return wc.WEECHAT_RC_OK
 wc.hook_config('plugins.var.python.' + name + '.*', 'config', '')
 wc.hook_signal('*,irc_in_privmsg', 'privmsg', '')
