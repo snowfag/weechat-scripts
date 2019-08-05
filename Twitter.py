@@ -4,7 +4,7 @@ import weechat as wc
 import re
 
 name = 'Twitter.py'
-wc.register(name, 'snowfag', '2.2', 'BSD-2c', 'Twitter status announcer', '', '')
+wc.register(name, 'snowfag', '3.0', 'BSD-2c', 'Twitter status announcer', '', '')
 
 def config(*args, **kwargs):
     global channels, consumer_key, consumer_secret, access_token_key, access_token_secret, bots_list
@@ -50,26 +50,26 @@ def privmsg(data, signal, signal_data):
                 if bots_test:
                     bots_exist = True
         if not bots_exist:
-            twitter_regex_match = re.compile(r'(.*https?://)?twitter\.com/.*/status/([0-9]{18})(.*)').match(details['text'])
+            twitter_regex_match = re.compile(u'(.*https?://)?twitter\.com/.*/status/([0-9]{18})(.*)').match(details['text'])
             if twitter_regex_match:
                 if consumer_key == 'not_set':
-                    wc.command(buffer_pointer, r'/msg {} Twitter consumer_key not set.'.format(buffer_name))
+                    wc.command(buffer_pointer, u'/msg {} Twitter consumer_key not set.'.format(buffer_name))
                 elif consumer_secret == 'not_set':
-                    wc.command(buffer_pointer, r'/msg {} Twitter consumer_secret not set.'.format(buffer_name))
+                    wc.command(buffer_pointer, u'/msg {} Twitter consumer_secret not set.'.format(buffer_name))
                 elif access_token_key == 'not_set':
-                    wc.command(buffer_pointer, r'/msg {} Twitter access_token_key not set.'.format(buffer_name))
+                    wc.command(buffer_pointer, u'/msg {} Twitter access_token_key not set.'.format(buffer_name))
                 elif access_token_secret == 'not_set':
-                    wc.command(buffer_pointer, r'/msg {} Twitter access_token_secret not set.'.format(buffer_name))
+                    wc.command(buffer_pointer, u'/msg {} Twitter access_token_secret not set.'.format(buffer_name))
                 else:
                     tweet_id = twitter_regex_match.group(2)
                     tweet = TwitterAPI(consumer_key, consumer_secret, access_token_key, access_token_secret).request('statuses/show/:{}'.format(tweet_id))
                     try:
-                        tweet_message = tweet.json()['text'].replace('\n', ' ').encode('utf-8')
+                        tweet_message = tweet.json()['text'].replace('\n', ' ')
                         tweet_message = HTMLParser().unescape(tweet_message)
-                        tweet_user = tweet.json()['user']['screen_name'].encode('utf-8')
-                        wc.command(buffer_pointer, r'/msg {} [Twitter] "{}" by @{}'.format(buffer_name, tweet_message, tweet_user))
+                        tweet_user = tweet.json()['user']['screen_name']
+                        wc.command(buffer_pointer, u'/msg {} [Twitter] "{}" by @{}'.format(buffer_name, tweet_message, tweet_user))
                     except:
-                        wc.command(buffer_pointer, r'/msg {} [Twitter] Error getting tweet info.'.format(buffer_name))
+                        wc.command(buffer_pointer, u'/msg {} [Twitter] Error getting tweet info.'.format(buffer_name))
     return wc.WEECHAT_RC_OK
 
 wc.hook_config('plugins.var.python.' + name + '.*', 'config', '')
