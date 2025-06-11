@@ -45,7 +45,10 @@ def privmsg(data, signal, signal_data):
                         vid_views = rvc.json()['items'][0]['statistics']['viewCount']
                         wc.command(buffer_pointer, u'/msg {} [Youtube] {} | Channel: {} | Views: {}'.format(buffer_name, vid_title, vid_channel, vid_views))
                     except:
-                        wc.command(buffer_pointer, u'/msg {} [Youtube] Error getting video info.'.format(buffer_name))
+                        try:
+                            wc.command(buffer_pointer, u'/msg {} [Youtube] {} | Channel: {}'.format(buffer_name, vid_title, vid_channel))
+                        except:
+                            wc.command(buffer_pointer, u'/msg {} [Youtube] Error getting video info.'.format(buffer_name))
             else:
                 wc.command(buffer_pointer, u'/msg {} Youtube api key not set.'.format(buffer_name))
     return wc.WEECHAT_RC_OK
